@@ -1,38 +1,24 @@
 import { Collapse } from 'antd';
 import {useEffect, useState} from "react";
 import {getHouses} from "../utils/api";
+import HousingStock from "./HousingStock";
 
 
-
-const itemsNest = [
-    {
-        key: '1',
-        label: 'This is panel nest panel',
-        children: <p>test</p>,
-    },
-];
-
-
-function HousingStock({streetId}) {
+function Houses({streetId}) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
         getHouses(streetId).then(res => {
-            console.log(res)
             setData(res.data)
         })
     }, [])
 
-    const onChange = (key) => {
-        console.log(key);
-    };
 
-
-    return <Collapse onChange={onChange} items={data.map((house, index) => ({
+    return <Collapse items={data.map((house, index) => ({
         key: index + 1,
         label: house.name,
-        children: <Collapse defaultActiveKey="1" items={itemsNest} />,
+        children: <HousingStock houseId={house.id} streetId={streetId} />,
     }))} />;
 }
 
-export default HousingStock
+export default Houses
